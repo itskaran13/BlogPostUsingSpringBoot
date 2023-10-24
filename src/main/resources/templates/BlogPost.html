@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>My Blog</title>
+    <style>
+        /* Basic CSS for styling */
+        body {
+            background-color: #f3f3f3;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .navbar {
+            overflow: hidden;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid black;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Styles for the search form */
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-form input[type="text"] {
+            width: 30vh;
+            height: 3vh;
+            padding: 5px;
+            font-size: 2vh;
+            border: 2px black solid;
+            border-radius: 10px;
+        }
+
+        .search-form button {
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        /* Styles for the filter and sort elements */
+        .filter-sort {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-sort select {
+            width: 20vh;
+            height: 3vh;
+            padding: 5px;
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+
+        /* Container for the blog post */
+        .blog-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        /* Individual blog post styles */
+        .post-container {
+            background-color: white;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: calc(50% - 20px);
+            box-sizing: border-box;
+            border: 2px solid black;
+        }
+
+        .post-container h1 {
+            color: black;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .post-container h4 {
+            color: black;
+        }
+
+        .search-form {
+            float: right;
+            margin-right: 10px;
+            display: flex;
+        }
+
+        .search-form input[type="text"] {
+            width: 200px;
+            padding: 5px;
+        }
+
+        .search-form button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .filter-sort {
+            float: right;
+            margin-right: 20px;
+        }
+
+        .filter-sort option {
+            background-color: white;
+            color: black;
+            font-size: 15px;
+        }
+
+        .filter-sort select {
+            margin-left: 20px;
+            padding: 5px;
+            border: 1px black solid;
+        }
+
+        .pagination-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .total-rows {
+            font-size: 16px;
+        }
+
+        .page-numbers {
+            margin-top: 10px;
+        }
+
+        .page-link {
+            padding: 5px 10px;
+            margin: 0 5px;
+            text-decoration: none;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #f3f3f3;
+            color: #333;
+        }
+
+        .page-link:hover {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .current-page {
+            font-weight: bold;
+        }
+
+        /* Styling for the login and register buttons */
+        .login-button {
+            margin-right: 10px;
+        }
+
+        .register-button {
+            margin-right: 10px;
+        }
+        .author{
+            font-size: 50px;
+            margin:5px;
+            color:blue;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h1>My Blog Application</h1>
+    <a href="/" class="login-button">Home</a>
+    <a href="/show-blog" class="register-button">Write Blog</a>
+    <a href="/loginform" class="login-button">Login</a>
+    <a href="/register" class="register-button">Register</a>
+    <form action="/search" method="get" class="search-form">
+        <input type="text" name="search" th:value="${keyword}" placeholder="Search...">
+        <input type="hidden" name="start" th:value="${pageNo}" />
+        <input type="hidden" name="sort" th:value="${order}" />
+        <button type="submit">Search</button>
+    </form>
+    <form sec:authorize="isAuthenticated()" th:action="@{/myblogs}" method="post">
+        <input type="submit" value="MyBlogs">
+    </form>
+    <div class="filter-sort">
+        <a href="/add-filters">Add Filters</a>
+        <form th:action="'/?start='+${pageNo}" method="get">
+            <select name="sort">
+                <option>Sort</option>
+                <option value="publishedAsc">Published Date (Ascending)</option>
+                <option value="publishedDesc">Published Date (Descending)</option>
+                <option value="titleAsc">Title (Ascending)</option>
+                <option value="titleDesc">Title (Descending)</option>
+            </select>
+            <button type="submit">Sort</button>
+        </form>
+    </div>
+</div>
+<div  sec:authorize="hasRole('ADMIN')">
+    <h1>HELLO,WELCOME <span class = "author" sec:authentication="principal.username"></span>TO MY BLOG APPLICATION. HERE YOU CAN CREATE BLOG AND UPDATE IT</h1>
+
+</div>
+<div  sec:authorize="hasRole('USER')">
+    <h1>HELLO,WELCOME <span class = "author" sec:authentication="principal.username"></span>TO MY BLOG APPLICATION. HERE YOU CAN CREATE BLOG AND UPDATE IT</h1>
+
+</div>
+
+<div class="blog-container">
+    <div th:each="post : ${blogPosts}" class="post-container">
+        <a th:href="@{'/viewpost?id=' + ${post.id}}">
+            <h1 th:text="${post.title}"></h1>
+            <h4 th:text="${post.author} + ', ' + ${post.publishedTime}"></h4>
+            <h4 th:text="${post.excerpt}"></h4>
+        </a>
+        <p><strong>Tag:</strong>
+            <span th:if="${post.tags}">
+                <span th:each="tag, iterStat : ${post.tags}">
+                    <span th:text="${tag.name}"></span>
+                    <span th:unless="${iterStat.last}">,</span>
+                    <span th:unless="${iterStat.last}">&nbsp;</span>
+                </span>
+            </span>
+            <span th:unless="${post.tags}">No Tags</span>
+        </p>
+        <a th:href="@{'/Updatepost?id=' + ${post.id}}" sec:authorize="hasRole('ADMIN')"><button>Update</button></a>
+        <a th:href="@{'/DeletePost/' + ${post.id}}" sec:authorize="hasRole('ADMIN')"><button>Delete</button></a>
+    </div>
+</div>
+<form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout">
+</form>
+
+
+
+<div th:if="${totalPages > 1}" class="pagination-container">
+    <div class="page-numbers">
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+            <a th:if="${pageNo != i}" th:href="@{'/?start=' + ${i} +  '&sort=' + ${sortDir} }" class="page-link">[[${i}]]</a>
+            <span th:unless="${pageNo != i}" class="current-page">[[${i}]]</span>
+        </span>
+    </div>
+</div>
+
+</body>
+</html>

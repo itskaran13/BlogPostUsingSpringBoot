@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Blog</title>
+    <style>
+        /* Basic CSS for styling */
+        body {
+            background-color: #f3f3f3; /* Background color */
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        /* Blog post container */
+        .post-container {
+            background-color: white;
+            padding-left: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: white;
+        }
+
+        /* Center align the table */
+        .table-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Button styling */
+        .back-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        /* Style for Add a Comment section */
+        .add-comment {
+            background-color: #f3f3f3;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-comment h3 {
+            color: #000;
+            font-size: 24px;
+        }
+
+        .add-comment label {
+            color: #000;
+            font-size: 16px;
+        }
+
+        .add-comment input, .add-comment textarea {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .add-comment textarea {
+            height: 100px;
+        }
+
+        .add-comment input[type="submit"] {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        h3{
+            padding-left: 80vh;
+        }
+
+    </style>
+</head>
+<body>
+<div th:object="${posts} " class="table-container">
+    <table class="post-container">
+
+        <tr>
+            <th>Title:</th></tr>
+        <tr>
+            <td th:text="${posts.title}"></td>
+        </tr>
+        <tr>
+            <th>Author:</th></tr>
+        <tr>
+            <td th:text="${posts.author}"></td>
+        </tr>
+        <tr>
+            <th>Excerpt:</th></tr>
+        <tr>
+            <td th:text="${posts.excerpt}"></td>
+        </tr>
+        <tr>
+            <th>Content:</th></tr>
+        <tr>
+            <td th:text="${posts.content}"></td>
+        </tr>
+        <tr>
+            <th>Published At:</th></tr>
+        <tr>
+            <td th:text="${posts.publishedTime}"></td>
+        </tr>
+        <tr>
+            <tr>
+        <th>Tags:</th>
+        </tr>
+            <td th:text="${posts.tags}"></td>
+        </tr>
+
+
+    </table>
+
+</div>
+
+<section class="add-comment">
+    <h3>Add a Comment</h3>
+
+    <form th:action="@{'/Posts/' + *{posts.id} + '/comment'}"  method = "post">
+
+        <label for="email">Name</label><br>
+        <input  id = "email" placeholder="Name" required th:name="name"><br><br>
+        <label for="name">Enter Your  Email:</label><br>
+        <input id = "name" placeholder="Enter Your Name"  th:name="email" required><br><br>
+        <label for="comment">Enter Your  Email:</label><br>
+        <textarea id="comment" placeholder="Your comment" required th:name="comment"></textarea>
+        <input type = "submit" value = "submit">
+    </form>
+</section>
+
+
+<section class="comments">
+    <h3>Comments</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Comment Text</th>
+            <th>Name</th>
+            <th>Updated At</th>
+            <th>Created At</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}">
+
+            <td th:text="${comment.email}">Email</td>
+            <td th:text="${comment.commentText}">Comment Text</td>
+            <td th:text="${comment.name}">Name</td>
+            <td th:text="${comment.updatedAt}">Updated At</td>
+            <td th:text="${comment.createdAt}">Created At</td>
+            <td><a th:href="@{'/UpdateComment?id=' + ${comment.id} + '&postId=' + ${posts.id} }"><button>update</button></a></td>
+            <td><a th:href="@{'/DeleteComment/'+ ${posts.id} +'/'+ ${comment.id}}"><button>Delete</button></a>
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</section>
+<div class="table-container">
+    <a th:href="@{/}" class="back-button">Back</a>
+</div>
+</body>
+</html>

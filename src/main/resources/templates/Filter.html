@@ -1,0 +1,155 @@
+
+
+
+<!--&lt;!&ndash;    <h1>Filters </h1>&ndash;&gt;-->
+<!--&lt;!&ndash;    <h2>Filter By Authors</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;    <input type = "checkbox" th:each =  " filter : ${authors}" th:value="${filter}" th:text = "${filter}" >&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Filter Page</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            margin: 0;-->
+<!--            background-color: #f3f3f3;-->
+<!--        }-->
+
+<!--        h1 {-->
+<!--            text-align: center;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+
+<!--        form {-->
+<!--            max-width: 400px;-->
+<!--            margin: 0 auto;-->
+<!--            background-color: #fff;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 5px;-->
+<!--            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
+
+<!--        label {-->
+<!--            display: block;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+
+<!--        input[type="text"],-->
+<!--        input[type="date"] {-->
+<!--            width: 100%;-->
+<!--            padding: 10px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+
+<!--        input[type="checkbox"] {-->
+<!--            margin-right: 5px;-->
+<!--        }-->
+
+<!--        button[type="submit"] {-->
+<!--            background-color: #333;-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            padding: 10px 20px;-->
+<!--            cursor: pointer;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+
+<!--        button[type="submit"]:hover {-->
+<!--            background-color: #555;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Filter Blog Posts</h1>-->
+<!--<form action="/filtered-blogs" method="get">-->
+<!--    <label>Tags:</label>-->
+<!--    <input type = "checkbox" th:each =  " filter : ${authors}" th:value="${filter}" th:text = "${filter}" >-->
+<!--    &lt;!&ndash; Add more checkboxes as needed for your tags &ndash;&gt;-->
+
+<!--    <label>Authors:</label>-->
+<!--    <input type = "checkbox" th:each =  " filter : ${tags}" th:value="${filter}" th:text = "${filter}" >-->
+<!--    &lt;!&ndash; Add more checkboxes as needed for your authors &ndash;&gt;-->
+
+<!--    <label for="publishDate">Publish Date:</label>-->
+<!--    <input type="date" name="publishDate" id="publishDate"><br>-->
+
+<!--    <button type="submit">Apply Filters</button>-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Filter Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f3f3f3;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        button[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+<h1>Filter Blog Posts</h1>
+<form action="/filtered-blogs" method="get">
+    <div>
+        <label>Tags:</label>
+        <th:block th:each="filter : ${tags}">
+            <input type="checkbox" name="tags" th:value="${filter}" th:text="${filter}">
+        </th:block>
+    </div>
+
+    <div>
+        <label>Authors:</label>
+        <input type="checkbox" name="authors" th:each="filter : ${authors}" th:value="${filter}" th:text="${filter}">
+    </div>
+    <button type="submit">Apply Filters</button>
+</form>
+</body>
+</html>

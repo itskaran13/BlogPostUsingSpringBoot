@@ -146,10 +146,19 @@
         .total-rows {
             font-size: 16px;
         }
+        input{
+            font-size: 15px;
+            padding:15px
+        }
 
         .page-numbers {
             margin-top: 10px;
         }
+        .logout{
+            background-color: green;
+            margin-left:60vh;
+        }
+
 
         .page-link {
             padding: 5px 10px;
@@ -219,8 +228,8 @@
         <a th:href="@{'/DeletePost/' + ${post.id}}"><button>Delete</button></a>
     </div>
 </div>
-<form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
-    <input type="submit" value="Logout">
+<form  sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+    <input class="logout" type="submit" value="Logout">
 </form>
 
 

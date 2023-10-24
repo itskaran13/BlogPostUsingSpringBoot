@@ -15,4 +15,6 @@ public interface UserRepository  extends JpaRepository<UserEntity, Long> {
                 "WHERE u.username=:user")
         List<PostEntity> findUserPosts(String user);
 
+        UserEntity findByEmail(String email);
+
 }

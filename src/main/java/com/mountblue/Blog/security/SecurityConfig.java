@@ -50,7 +50,7 @@ public class SecurityConfig {
                                 .loginProcessingUrl("/authenticateTheUser")
                                 .permitAll()
                 )
-        .logout(logout -> logout.permitAll()
+        .logout(logout -> logout.permitAll().logoutSuccessUrl("/")
 
                 )
                     .exceptionHandling(configurer ->

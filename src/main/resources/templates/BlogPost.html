@@ -11,7 +11,10 @@
             font-family: Arial, sans-serif;
             margin: 0;
         }
-
+        input{
+            font-size: 15px;
+            padding:15px
+        }
         .navbar {
             overflow: hidden;
             padding: 10px 0;
@@ -108,6 +111,8 @@
             display: flex;
         }
 
+
+
         .search-form input[type="text"] {
             width: 200px;
             padding: 5px;
@@ -192,17 +197,17 @@
     <h1>My Blog Application</h1>
     <a href="/" class="login-button">Home</a>
     <a href="/show-blog" class="register-button">Write Blog</a>
-    <a href="/loginform" class="login-button">Login</a>
-    <a href="/register" class="register-button">Register</a>
+    <form sec:authorize="isAuthenticated()" th:action="@{/myblogs}" method="post">
+        <input type="submit" value="MyBlogs">
+    </form>
+
     <form action="/search" method="get" class="search-form">
         <input type="text" name="search" th:value="${keyword}" placeholder="Search...">
         <input type="hidden" name="start" th:value="${pageNo}" />
         <input type="hidden" name="sort" th:value="${order}" />
         <button type="submit">Search</button>
     </form>
-    <form sec:authorize="isAuthenticated()" th:action="@{/myblogs}" method="post">
-        <input type="submit" value="MyBlogs">
-    </form>
+
     <div class="filter-sort">
         <a href="/add-filters">Add Filters</a>
         <form th:action="'/?start='+${pageNo}" method="get">
@@ -216,6 +221,8 @@
             <button type="submit">Sort</button>
         </form>
     </div>
+    <a href="/loginform" class="login-button">Login</a>
+    <a href="/register" class="register-button">Register</a>
 </div>
 <div  sec:authorize="hasRole('ADMIN')">
     <h1>HELLO,WELCOME <span class = "author" sec:authentication="principal.username"></span>TO MY BLOG APPLICATION. HERE YOU CAN CREATE BLOG AND UPDATE IT</h1>

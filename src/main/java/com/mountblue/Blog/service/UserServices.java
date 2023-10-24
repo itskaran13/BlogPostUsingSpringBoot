@@ -23,6 +23,10 @@ public class UserServices implements UserDetailsService {
     private UserRepository userRepository;
 
     public UserEntity addBlog(UserEntity userEntity) {
+        UserEntity user = userRepository.findByEmail(userEntity.getEmail());
+        if(user != null){
+            return user;
+        }
         return userRepository.save(userEntity);
     }
 

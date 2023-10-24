@@ -49,10 +49,13 @@ public class PostController {
 
     @RequestMapping(value = "/add-blog", method = RequestMethod.POST)
     public String addBlogPost(@ModelAttribute PostEntity postEntity, @RequestParam("new_tags") String tags) {
+        CustomUserDetails currentUser = userServices.getCurrentUser();
+
         Set<TagEntity> tagList = Arrays.stream(tags.split(","))
                 .map(tagName -> tagService.saveTag(tagName.trim()))
                 .collect(Collectors.toSet());
         postEntity.setTags(tagList);
+        postEntity.setAuthor(currentUser.getUsername());
         postService.addBlog(postEntity);
         return "redirect:/";
     }
@@ -107,6 +110,10 @@ public class PostController {
         int pageSize = 10;
         if (pageNo == null) {
             pageNo = 1;
+        }
+        CustomUserDetails currentUser = userServices.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser.getUsername());
         }
         Page<PostEntity> page = postService.findPage(pageNo, pageSize, order);
         List<PostEntity> blogList = page.getContent();

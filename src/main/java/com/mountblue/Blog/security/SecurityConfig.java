@@ -42,12 +42,14 @@ public class SecurityConfig {
                                     .requestMatchers("/filtered-blogs").permitAll()
                                     .requestMatchers("/register").permitAll()
                                     .requestMatchers("/addUser").permitAll()
-                                    .requestMatchers("/Updatepost/**").hasRole("USER")
+                                    .requestMatchers("/Posts/{id}/comment").permitAll()
+                                    .requestMatchers("/Updatepost/**").hasAnyRole("USER","ADMIN")
                                     .anyRequest().authenticated())
                         .formLogin(form ->
                         form
                                 .loginPage("/loginform")
                                 .loginProcessingUrl("/authenticateTheUser")
+                                .defaultSuccessUrl("/")
                                 .permitAll()
                 )
         .logout(logout -> logout.permitAll().logoutSuccessUrl("/")

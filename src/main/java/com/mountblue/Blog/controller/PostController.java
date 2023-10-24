@@ -2,10 +2,14 @@ package com.mountblue.Blog.controller;
 import com.mountblue.Blog.entities.PostEntity;
 import com.mountblue.Blog.entities.TagEntity;
 import com.mountblue.Blog.repository.PostRepository;
+import com.mountblue.Blog.security.CustomUserDetails;
 import com.mountblue.Blog.service.PostService;
 import com.mountblue.Blog.service.TagService;
+import com.mountblue.Blog.service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +29,19 @@ public class PostController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private UserServices userServices;
+
 
     @RequestMapping("/viewpost")
     public String postEntity(@RequestParam Long id, Model model) {
         PostEntity retreivedPost = postService.getPostById(id);
+        CustomUserDetails currentUser = userServices.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser.getEmail());
+            model.addAttribute("admin",currentUser.isAdmin());
+        }
+
         model.addAttribute("posts", retreivedPost);
         model.addAttribute("comments", retreivedPost.getComments());
         return "ViewMore";
@@ -45,9 +58,16 @@ public class PostController {
     }
 
     @RequestMapping(value = "/show-blog", method = RequestMethod.GET)
-    public String showBlogPost() {
+    public String showBlogPost(Model model, PostEntity postEntity) {
+        CustomUserDetails currentUser = userServices.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser.getUsername());
+        }
+        LocalDate date  = LocalDate.now();
+        model.addAttribute("published" ,date);
         return "WriteBlog";
     }
+
 
 
     @RequestMapping("/Updatepost")
@@ -84,7 +104,7 @@ public class PostController {
                                 @RequestParam(required = false, value = "sort") String order, Model model
     ) {
 
-        int pageSize = 2;
+        int pageSize = 10;
         if (pageNo == null) {
             pageNo = 1;
         }

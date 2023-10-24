@@ -197,9 +197,10 @@
     <h1>My Blog Application</h1>
     <a href="/" class="login-button">Home</a>
     <a href="/show-blog" class="register-button">Write Blog</a>
-    <form sec:authorize="isAuthenticated()" th:action="@{/myblogs}" method="post">
+    <form sec:authorize="hasRole('USER')" th:action="@{/myblogs}" method="post">
         <input type="submit" value="MyBlogs">
     </form>
+
 
     <form action="/search" method="get" class="search-form">
         <input type="text" name="search" th:value="${keyword}" placeholder="Search...">

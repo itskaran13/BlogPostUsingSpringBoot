@@ -17,8 +17,7 @@
             display: block;
             margin-bottom: 5px;
         }
-        input[type="text"],
-        input[type="date"],
+        input,
         textarea {
             width: 100%;
             padding: 10px;
@@ -62,7 +61,7 @@
     <a href="/">Home</a>
     <a href="/show-blog">Write Blog</a>
 </div>
-<form th:action="@{/add-blog}" method="post">
+<form th:action="@{/add-blog}" th:object="${published}" method="post">
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" required />
     <label for="excerpt">Excerpt:</label>
@@ -70,13 +69,11 @@
     <label for="content">Content:</label>
     <textarea id="content" name="content"  rows="10" required ></textarea>
     <label for="author">Author:</label>
-    <input type="text" id="author" name="author" required />
+    <input  id="author" th:value="${currentUser}" readonly="readonly" required />
     <label for="tags">Add tags(Seperated with comma(','))</label>
     <input type="text"  id="tags" name="new_tags" required />
     <label for="published_at">Published Date:</label>
-    <input type="date"  id="published_at" name="published_at" required />
-    <label for="is_published">Is Published:</label>
-    <input type="checkbox" id="is_published" name="is_published" />
+    <input   id="published_at" th:value="${published}" readonly="readonly" required />
 
 
      <a href="/"><button type="submit">Submit</button></a>

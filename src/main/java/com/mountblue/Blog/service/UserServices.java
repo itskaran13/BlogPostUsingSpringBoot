@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,11 +40,22 @@ public class UserServices implements UserDetailsService {
 
         return new CustomUserDetails(user);
     }
-    public List<PostEntity> getUsersPosts(){
+    public List<PostEntity> getUsersPosts() {
         List<PostEntity> postList = new ArrayList<>();
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
-            postList=userRepository.findUserPosts(user);
-
+        postList = userRepository.findUserPosts(user);
         return postList;
     }
+
+    public CustomUserDetails getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof CustomUserDetails) {
+            return (CustomUserDetails) principal;
+        }
+
+        // Handle cases where the principal is not a CustomUserDetails as needed.
+        return null;
     }
+}
+

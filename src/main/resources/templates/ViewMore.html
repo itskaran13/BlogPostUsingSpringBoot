@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>My Blog</title>
     <style>
@@ -124,12 +125,11 @@
             <tr>
         <th>Tags:</th>
         </tr>
+        <tr>
             <td th:text="${posts.tags}"></td>
         </tr>
-
-
+        <tr>
     </table>
-
 </div>
 
 <section class="add-comment">
@@ -158,8 +158,8 @@
             <th>Name</th>
             <th>Updated At</th>
             <th>Created At</th>
-            <th>Update</th>
-            <th>Delete</th>
+            <th th:if="${posts.user.email} == ${currentUser} or ${admin}">Update</th>
+            <th th:if="${posts.user.email} == ${currentUser} or ${admin}">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -169,12 +169,11 @@
             <td th:text="${comment.commentText}">Comment Text</td>
             <td th:text="${comment.name}">Name</td>
             <td th:text="${comment.updatedAt}">Updated At</td>
-            <td th:text="${comment.createdAt}">Created At</td>
-            <td><a th:href="@{'/UpdateComment?id=' + ${comment.id} + '&postId=' + ${posts.id} }"><button>update</button></a></td>
-            <td><a th:href="@{'/DeleteComment/'+ ${posts.id} +'/'+ ${comment.id}}"><button>Delete</button></a>
+            <td th:text="${comment.createdAt}" >Created At</td>
+
+            <td><a th:if="${posts.user.email} == ${currentUser} or ${admin}" th:href="@{'/UpdateComment?id=' + ${comment.id} + '&postId=' + ${posts.id} }" ><button>update</button></a></td>
+            <td><a th:if="${posts.user.email} == ${currentUser} or ${admin}" th:href="@{'/DeleteComment/'+ ${posts.id} +'/'+ ${comment.id}}" ><button>Delete</button></a>
             </td>
-
-
         </tr>
         </tbody>
     </table>

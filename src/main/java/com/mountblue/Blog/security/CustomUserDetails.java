@@ -15,10 +15,12 @@ public class CustomUserDetails implements UserDetails {
     private String username;
     private String password;
 
+    private String email;
     public CustomUserDetails(UserEntity user) {
         this.userEntity = user;
         this.username = user.getUsername();
         this.password = user.getPassword();
+        this.email=user.getEmail();
     }
         @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -52,9 +54,18 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     @Override
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean isAdmin() {
+        return userEntity.getAuthorities().contains("ADMIN");
+    }
+
 }
 

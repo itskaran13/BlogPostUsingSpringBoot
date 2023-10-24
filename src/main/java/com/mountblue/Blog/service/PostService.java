@@ -30,7 +30,10 @@
             PostEntity post = postRepository.findById(id).get();
             return post;
         }
+        public List<PostEntity> getAllPost(){
+           return postRepository.findAll();
 
+        }
         public PostEntity addBlog(PostEntity postEntity) {
             postEntity.setUser(
                     userRepository.findByUsername(postEntity.getAuthor())
@@ -56,7 +59,6 @@
             }
             return matchingPosts;
         }
-
 
         public Page<PostEntity> findPage(int pageNo, int pageSize, String sort) {
             // Create a Pageable object with sorting

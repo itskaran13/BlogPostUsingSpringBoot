@@ -14,7 +14,7 @@ public class UserEntity {
     private  String username;
 
     @Column(name = "authorities")
-    private String authorities = "ROLE_USER";
+    private String authorities = "ROLE_ADMIN";
 
     public String getAuthorities() {
         return authorities;
